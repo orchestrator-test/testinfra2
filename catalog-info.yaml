@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: testinfra2
+  description: A workflow for onboarding applications to OCP cluster
+  annotations:
+    backstage.io/kubernetes-namespace: orchestrator-gitops
+    backstage.io/kubernetes-id: testinfra2-ci
+    janus-idp.io/tekton: testinfra2
+    github.com/project-slug: orchestrator-test/testinfra2
+spec:
+  type: workflow-project
+  system: system:default/janus-orchestrator
+  lifecycle: development
+  owner: user:guest

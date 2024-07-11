@@ -1,0 +1,48 @@
+# From https://github.com/redhat-developer/red-hat-developer-hub-software-templates/blob/main/skeletons/tekton/tekton/pipelinerun.yaml
+---
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: testinfra2-__COMMIT_ID__
+  namespace: orchestrator-gitops
+  labels:
+    backstage.io/kubernetes-id: testinfra2-ci
+spec:
+  params:
+    - name: gitUrl
+      value: git@github.com:orchestrator-test/testinfra2.git
+    - name: gitOpsUrl
+      value: git@github.com:orchestrator-test/testinfra2-gitops.git
+    - name: workflowId
+      value: testinfra2
+    - name: convertToFlat
+      value: 'true'
+    - name: quayOrgName
+      value: rhdh-orchestrator-test
+    - name: quayRepoName
+      value: testinfra2
+  pipelineRef:
+    name: workflow-deployment
+  workspaces:
+    - name: workflow-source
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+    - name: workflow-gitops
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+    - name: docker-credentials
+      secret:
+        secretName: docker-credentials
+    - name: ssh-creds
+      secret:
+        secretName: git-ssh-credentials
